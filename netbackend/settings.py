@@ -37,7 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'network',
+    'social_django',
+    'rest_framework_simplejwt',
+    'rest_framework',
+    "phonenumber_field",
+    'services',
+    "taggit",
 ]
 
 MIDDLEWARE = [

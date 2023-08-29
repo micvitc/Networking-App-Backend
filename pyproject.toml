@@ -16,6 +16,12 @@ djangorestframework-simplejwt = "^5.2.2"
 gunicorn = "^21.2.0"
 dj-database-url = "^2.0.0"
 django-environ = "^0.10.0"
+social-auth-app-django = "^5.2.0"
+djangorestframework = "^3.14.0"
+django-filter = "^23.2"
+django-taggit = "^4.0.0"
+django-phonenumber-field = {extras = ["phonenumberslite"], version = "^7.1.0"}
+shortuuid = "^1.0.11"
 
 [build-system]
 requires = ["poetry-core"]
