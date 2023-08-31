@@ -21,9 +21,9 @@ class HashTag(TaggedItemBase):
 
 # Create your models here.
 class Department(models.Model):
-    department_name = models.CharField(max_length = 100)
-    program = models.CharField(max_length = 100)
-    department_school = models.CharField(max_length = 100,choices = SCHOOL_CHOICES)
+    department_name = models.CharField(max_length = 100,null=True)
+    program = models.CharField(max_length = 100,null=True)
+    department_school = models.CharField(max_length = 100,choices = SCHOOL_CHOICES,null=True)
     
     def __str__(self):
         return str(self.department_name)+' -> '+str(self.program)+' -> '+str(self.department_school)
@@ -31,13 +31,12 @@ class Department(models.Model):
 class Profile(models.Model):
     user=models.OneToOneField(User, on_delete=models.CASCADE)
     name=models.CharField(max_length=100)
-    dept=models.ForeignKey(Department, on_delete=models.CASCADE)
+    dept=models.ForeignKey(Department, on_delete=models.CASCADE,null=True)
     admitted_year=models.CharField(max_length=200,null=True)
-    status=models.CharField(max_length=100, choices=STATUS_CHOICES, default="Current")
-    education_level=models.CharField(max_length=100)
-    about=models.TextField()
-    profile_photo=models.URLField(max_length=200)
-    
+    profile_type=models.CharField(max_length=100, choices=STATUS_CHOICES, default="Unverified")
+    education_level=models.CharField(max_length=100,null=True)
+    about=models.TextField(null=True)
+    profile_photo=models.URLField(max_length=200,null=True)
     privacy=models.CharField(max_length=100, choices=PRIVACY_CHOICES, default="Public")
 
     phone_number = PhoneNumberField(blank=True, null=True)
@@ -68,7 +67,7 @@ class Following(models.Model):
     profile = models.ForeignKey(Profile,on_delete=models.CASCADE,related_name='profile')
     following_id = models.ForeignKey(Profile,on_delete=models.CASCADE,related_name='following_profile')
     date_followed = models.DateField(auto_now_add=True)
-    request_status = models.CharField(max_length=100, choices=REQUEST_STATUS,default="Pending")
+    request_status = models.CharField(max_length=100, choices=REQUEST_STATUS,default="Followed")
     slug = models.SlugField(blank=True)
 
     def save(self,*args,**kwargs):
@@ -86,7 +85,6 @@ class Post(models.Model):
     profile=models.ForeignKey(Profile, on_delete=models.CASCADE)
     caption=models.CharField(max_length=250)
     tags=TaggableManager(through=HashTag,related_name="hash_tag")
-    image_or_video=models.URLField(max_length=200)
     date_posted=models.DateField(auto_now_add=True)
     slug = models.SlugField(blank=True)
 
@@ -96,6 +94,10 @@ class Post(models.Model):
         super(Post, self).save(*args, **kwargs)
     def __str__(self):
         return str(self.profile.user.username)+" --> post_id ("+str(self.pk)+") --> ("+str(self.date_posted)+")"
+
+class PostImage(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
+    image = models.URLField(max_length=200)
 
 class Comment(models.Model):
     post=models.ForeignKey(Post, on_delete=models.CASCADE)
