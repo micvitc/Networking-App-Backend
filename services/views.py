@@ -15,6 +15,17 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from .models import *
 
 
+class VerifyEmailStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = request.user
+        try:
+            email_address = EmailAddress.objects.get(user=user, primary=True)
+            email_verified = email_address.verified
+            return Response({'email_verified': email_verified}, status=status.HTTP_200_OK)
+        except EmailAddress.DoesNotExist:
+            return Response({'email_verified': False}, status=status.HTTP_200_OK)
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class=MyTokenObtainPairSerializer
