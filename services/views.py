@@ -1,14 +1,23 @@
+#views.py
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from allauth.account.models import EmailAddress
 from allauth.account.utils import send_email_confirmation
-from .serializers import UserRegistrationSerializer
+from .serializers import UserRegistrationSerializer,MyTokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
+from .models import *
+
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class=MyTokenObtainPairSerializer
 
 class UserRegistrationAPIView(APIView):
     def post(self, request):

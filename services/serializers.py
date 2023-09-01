@@ -4,7 +4,34 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from allauth.account.models import EmailAddress
-from .models import Profile
+from .models import *
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['username'] = user.username
+        token['email']=user.email
+        
+        # Add custom claims to the token payload
+        try:
+            email_address = EmailAddress.objects.get(user=user, primary=True)
+            token['email_verified'] = email_address.verified
+        except EmailAddress.DoesNotExist:
+            token['email_verified'] = False
+        
+        try:
+            profile = Profile.objects.get(user=user)
+            token['profile_data'] = {
+                'name': profile.name,
+                'profile_type': profile.profile_type,
+                # Add other profile fields here
+            }
+        except Profile.DoesNotExist:
+            token['profile_data'] = {}   
+        return token
+        
 
 class UserRegistrationSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)

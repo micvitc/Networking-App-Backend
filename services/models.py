@@ -38,7 +38,7 @@ class Profile(models.Model):
     about=models.TextField(null=True)
     profile_photo=models.URLField(max_length=200,null=True)
     privacy=models.CharField(max_length=100, choices=PRIVACY_CHOICES, default="Public")
-
+    
     phone_number = PhoneNumberField(blank=True, null=True)
     linkedIn = models.URLField(max_length=200, blank=True, null=True)
     instagram = models.URLField(max_length=200, blank=True, null=True)
