@@ -1,4 +1,9 @@
-STATUS_CHOICES = [("Alumini","Alumini"), ("Student","Student"),("Club","Club"),("Faculty","Faculty"),("Unverified","Unverified")]
+STATUS_CHOICES = [("Alumini","Alumini"),
+                   ("Student","Student"),
+                   ("Club","Club"),
+                   ("Faculty","Faculty"),
+                   ("Blocked","Blocked"),
+                   ("Unverified","Unverified")]
 PRIVACY_CHOICES = [("Public","Public"),("Private","Private")]
 REQUEST_STATUS=[("Followed","Followed"),("Unfollow","Unfollow"),("Blocked","Blocked")]
 

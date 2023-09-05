@@ -30,21 +30,24 @@ class Department(models.Model):
 
 class Profile(models.Model):
     user=models.OneToOneField(User, on_delete=models.CASCADE)
-    name=models.CharField(max_length=100)
+    name=models.CharField(max_length=100,null=True)
     dept=models.ForeignKey(Department, on_delete=models.CASCADE,null=True)
-    admitted_year=models.CharField(max_length=200,null=True)
+    admitted_year=models.CharField(max_length=200,blank=True, null=True)
     profile_type=models.CharField(max_length=100, choices=STATUS_CHOICES, default="Unverified")
-    education_level=models.CharField(max_length=100,null=True)
+    education_level=models.CharField(max_length=100,blank=True, null=True)
     about=models.TextField(null=True)
-    profile_photo=models.URLField(max_length=200,null=True)
+    profile_photo=models.URLField(max_length=200,blank=True, null=True)
     privacy=models.CharField(max_length=100, choices=PRIVACY_CHOICES, default="Public")
     
-    phone_number = PhoneNumberField(blank=True, null=True)
+    city=models.CharField(max_length=255,null=True)
+    state = models.CharField(max_length=255,null = True)
+
+    phone_number = PhoneNumberField( null=True)
     linkedIn = models.URLField(max_length=200, blank=True, null=True)
     instagram = models.URLField(max_length=200, blank=True, null=True)
 
-    skills = TaggableManager(through=SkillTag,related_name="skill_tag")
-    interests = TaggableManager(through=InterestTag,related_name="interest_tag")
+    skills = TaggableManager(through=SkillTag,related_name="skill_tag",blank=True)
+    interests = TaggableManager(through=InterestTag,related_name="interest_tag",blank=True)
 
     slug = models.SlugField(blank=True)
     
@@ -54,6 +57,7 @@ class Profile(models.Model):
         super(Profile, self).save(*args, **kwargs)
     def __str__(self):
         return self.user.username
+    
 
 class Feedback(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -64,7 +68,7 @@ class Feedback(models.Model):
 
 
 class Following(models.Model):
-    profile = models.ForeignKey(Profile,on_delete=models.CASCADE,related_name='profile')
+    profile = models.ForeignKey(Profile,on_delete=models.CASCADE,related_name='profile_p')
     following_id = models.ForeignKey(Profile,on_delete=models.CASCADE,related_name='following_profile')
     date_followed = models.DateField(auto_now_add=True)
     request_status = models.CharField(max_length=100, choices=REQUEST_STATUS,default="Followed")
@@ -82,7 +86,7 @@ class Following(models.Model):
 
 
 class Post(models.Model):
-    profile=models.ForeignKey(Profile, on_delete=models.CASCADE)
+    profile=models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='posts')
     caption=models.CharField(max_length=250)
     tags=TaggableManager(through=HashTag,related_name="hash_tag")
     date_posted=models.DateField(auto_now_add=True)
@@ -96,11 +100,18 @@ class Post(models.Model):
         return str(self.profile.user.username)+" --> post_id ("+str(self.pk)+") --> ("+str(self.date_posted)+")"
 
 class PostImage(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_images')
     image = models.URLField(max_length=200)
+    slug = models.SlugField(blank=True)
+    def save(self,*args,**kwargs):
+        if not self.slug:
+            self.slug = shortuuid.ShortUUID().random(length=10)
+        super(PostImage, self).save(*args, **kwargs)
+    def __str__(self):
+        return str(self.post.profile.user.username)+" --> post_id ("+str(self.post.slug)+") --> image_id ("+str(self.slug)+")"
 
 class Comment(models.Model):
-    post=models.ForeignKey(Post, on_delete=models.CASCADE)
+    post=models.ForeignKey(Post, on_delete=models.CASCADE,related_name='comments')
     profile=models.ForeignKey(Profile, on_delete=models.CASCADE)
     comments=models.TextField()
     date_commented=models.DateField(auto_now_add=True)
@@ -114,7 +125,7 @@ class Comment(models.Model):
         return str(self.profile.user.username)+" commented on "+str(self.post.profile.user.username)+ "'s post"
 
 class Like(models.Model):
-    post=models.ForeignKey(Post, on_delete=models.CASCADE)
+    post=models.ForeignKey(Post, on_delete=models.CASCADE,related_name='likes')
     profile=models.ForeignKey(Profile, on_delete=models.CASCADE)
     slug = models.SlugField(blank=True)
 
