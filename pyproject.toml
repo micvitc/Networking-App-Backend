@@ -23,6 +23,7 @@ django-taggit = "^4.0.0"
 django-phonenumber-field = {extras = ["phonenumberslite"], version = "^7.1.0"}
 shortuuid = "^1.0.11"
 django-allauth = "^0.55.2"
+psycopg2 = "^2.9.7"
 
 [build-system]
 requires = ["poetry-core"]

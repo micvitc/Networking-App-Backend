@@ -29,8 +29,6 @@ def get_routes(request):
         '/profile/create/',
         '/search/',
         '/profile/<slug:slug>/',
-
-
     ]
     return Response(routes)
 
