@@ -141,6 +141,7 @@ TEMPLATES = [
     },
 ]
 
+WSGI_APPLICATION = 'netbackend.wsgi.application'
 ASGI_APPLICATION = 'netbackend.asgi.application'
 
 
