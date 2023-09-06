@@ -31,7 +31,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['networking-app-backend-jw26.onrender.com','networking-app-backend.onrender.com']
+ALLOWED_HOSTS = ['127.0.0.1','networking-app-backend-jw26.onrender.com','networking-app-backend.onrender.com']
 
 
 
@@ -141,7 +141,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'netbackend.wsgi.application'
+ASGI_APPLICATION = 'netbackend.asgi.application'
 
 
 # Database
