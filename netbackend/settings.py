@@ -200,7 +200,7 @@ MEDIA_URL='media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+TAGGIT_CASE_INSENSITIVE=True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = env.str('EMAIL_HOST')
@@ -208,7 +208,7 @@ EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env.str('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
-
+TAGGIT_CASE_INSENSITIVE=True
 
 # Base URL to use in email templates and redirects
 SITE_ID = 1

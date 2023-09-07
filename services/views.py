@@ -101,10 +101,12 @@ class ProfileSearchListView(generics.ListAPIView):
 
         return queryset
 
-class ProfileCreateView(generics.ListCreateAPIView):
+
+class ProfileCreateView(generics.CreateAPIView):
     queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
+    serializer_class = ProfileCreateSerializer
     permission_classes = [IsAuthenticated]
+
 
 class ProfileView(APIView):
     def get(self, request, slug):
@@ -118,3 +120,12 @@ class ProfileView(APIView):
         serializer = ProfileViewSerializer(profile)
 
         return Response(serializer.data)
+    
+class PostCreateView(generics.CreateAPIView):
+    serializer_class = PostCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+class PostRetrieveView(generics.RetrieveAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostViewSerializer
+    lookup_field = 'slug'  # Use 'slug' as the lookup field for retrieving posts

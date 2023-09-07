@@ -9,15 +9,6 @@ from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 from django.utils.text import slugify
 
-class SkillTag(TaggedItemBase):
-    content_object = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name="skill_tag")
-
-class InterestTag(TaggedItemBase):
-    content_object = models.ForeignKey("Profile", on_delete=models.CASCADE,related_name="interest_tag")
-
-class HashTag(TaggedItemBase):
-    content_object = models.ForeignKey("Post", on_delete=models.CASCADE,related_name="hash_tag")
-
 
 # Create your models here.
 class Department(models.Model):
@@ -46,8 +37,7 @@ class Profile(models.Model):
     linkedIn = models.URLField(max_length=200, blank=True, null=True)
     instagram = models.URLField(max_length=200, blank=True, null=True)
 
-    skills = TaggableManager(through=SkillTag,related_name="skill_tag",blank=True)
-    interests = TaggableManager(through=InterestTag,related_name="interest_tag",blank=True)
+    skills = TaggableManager(blank=True)
 
     slug = models.SlugField(blank=True)
     
@@ -88,7 +78,7 @@ class Following(models.Model):
 class Post(models.Model):
     profile=models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='posts')
     caption=models.CharField(max_length=250)
-    tags=TaggableManager(through=HashTag,related_name="hash_tag")
+    tags=TaggableManager(blank=True)
     date_posted=models.DateField(auto_now_add=True)
     slug = models.SlugField(blank=True)
 
