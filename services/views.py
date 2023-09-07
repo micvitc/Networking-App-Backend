@@ -26,9 +26,12 @@ def get_routes(request):
         '/logout/',
         '/verify/',
         '/token/refresh/',
-        '/profile/create/',
         '/search/',
+        '/profile/create/',
         '/profile/<slug:slug>/',
+        '/post/create/',
+        '/post/<slug:slug>/',
+
     ]
     return Response(routes)
 

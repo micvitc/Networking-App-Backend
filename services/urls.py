@@ -17,6 +17,6 @@ urlpatterns = [
     path('search/', ProfileSearchListView.as_view(), name='user-profile-list'),
     path('profile/<slug:slug>/', ProfileView.as_view(), name='user-profile-detail'),
 
-    path('posts/create/', PostCreateView.as_view(), name='post-create'),
-    path('posts/<slug:slug>/', PostRetrieveView.as_view(), name='post-detail'),
+    path('post/create/', PostCreateView.as_view(), name='post-create'),
+    path('post/<slug:slug>/', PostRetrieveView.as_view(), name='post-detail'),
 ]
